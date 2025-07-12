@@ -874,7 +874,7 @@ static void delete_safe_mode_sentinel(void)
 
 #ifdef _WIN32
 static constexpr char vcRunErrorTitle[] = "Outdated Visual C++ Runtime";
-static constexpr char vcRunErrorMsg[] = "OBS Studio requires a newer version of the Microsoft Visual C++ "
+static constexpr char vcRunErrorMsg[] = "system_app requires a newer version of the Microsoft Visual C++ "
 					"Redistributables.\n\nYou will now be directed to the download page.";
 static constexpr char vcRunInstallerUrl[] = "https://obsproject.com/visual-studio-2022-runtimes";
 
@@ -1067,7 +1067,7 @@ int main(int argc, char *argv[])
 			exit(0);
 
 		} else if (arg_is(argv[i], "--version", "-V")) {
-			std::cout << "OBS Studio - " << App()->GetVersionString(false) << "\n";
+			std::cout << "system_app - " << App()->GetVersionString(false) << "\n";
 			exit(0);
 		}
 	}
