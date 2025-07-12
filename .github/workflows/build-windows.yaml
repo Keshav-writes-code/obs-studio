@@ -1,7 +1,7 @@
 name: Build Windows
 run-name: Windows build for ${{ github.ref_name }} 🪟
 
-on:
+"on":
   workflow_dispatch:
     inputs:
       build_config:
