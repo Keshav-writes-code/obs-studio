@@ -1823,7 +1823,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, LPWSTR lpCmdLine, int)
 
 	if (!IsWindows10OrGreater()) {
 		MessageBox(nullptr,
-			   L"OBS Studio 28 and newer no longer support Windows 7,"
+			   L"system_app 28 and newer no longer support Windows 7,"
 			   L" Windows 8, or Windows 8.1. You can disable the"
 			   L" following setting to opt out of future updates:"
 			   L" Settings → General → General → Automatically check"
