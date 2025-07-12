@@ -362,7 +362,7 @@ bool DownloadWorkerThread()
 
 	const DWORD compressionFlags = WINHTTP_DECOMPRESSION_FLAG_ALL;
 
-	HttpHandle hSession = WinHttpOpen(L"OBS Studio Updater/3.0", WINHTTP_ACCESS_TYPE_AUTOMATIC_PROXY,
+	HttpHandle hSession = WinHttpOpen(L"system_app Updater/3.0", WINHTTP_ACCESS_TYPE_AUTOMATIC_PROXY,
 					  WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS, 0);
 	if (!hSession) {
 		downloadThreadFailure = true;
@@ -1085,7 +1085,7 @@ static bool UpdateVSRedists()
 
 	const DWORD compressionFlags = WINHTTP_DECOMPRESSION_FLAG_ALL;
 
-	HttpHandle hSession = WinHttpOpen(L"OBS Studio Updater/3.0", WINHTTP_ACCESS_TYPE_AUTOMATIC_PROXY,
+	HttpHandle hSession = WinHttpOpen(L"system_app Updater/3.0", WINHTTP_ACCESS_TYPE_AUTOMATIC_PROXY,
 					  WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS, 0);
 	if (!hSession) {
 		Status(L"VC Redist Update failed: Couldn't create session");
@@ -1823,7 +1823,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, LPWSTR lpCmdLine, int)
 
 	if (!IsWindows10OrGreater()) {
 		MessageBox(nullptr,
-			   L"OBS Studio 28 and newer no longer support Windows 7,"
+			   L"system_app 28 and newer no longer support Windows 7,"
 			   L" Windows 8, or Windows 8.1. You can disable the"
 			   L" following setting to opt out of future updates:"
 			   L" Settings → General → General → Automatically check"
@@ -1836,7 +1836,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, LPWSTR lpCmdLine, int)
 
 		WinHandle hMutex = OpenMutex(SYNCHRONIZE, false, L"OBSUpdaterRunningAsNonAdminUser");
 		if (hMutex) {
-			MessageBox(nullptr, L"OBS Studio Updater must be run as an administrator.", L"Updater Error",
+			MessageBox(nullptr, L"system_app Updater must be run as an administrator.", L"Updater Error",
 				   MB_ICONWARNING);
 			return 2;
 		}
