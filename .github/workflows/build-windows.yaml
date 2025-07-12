@@ -1,0 +1,227 @@
+name: Build Windows
+run-name: Windows build for ${{ github.ref_name }} 🪟
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_config:
+        description: 'Build configuration'
+        type: choice
+        options:
+          - RelWithDebInfo
+          - Release
+          - Debug
+        default: RelWithDebInfo
+      architecture:
+        description: 'Target architecture'
+        type: choice
+        options:
+          - x64
+          - arm64
+          - both
+        default: both
+      create_package:
+        description: 'Create installation package'
+        type: boolean
+        default: true
+  pull_request:
+    paths:
+      - '.github/workflows/build-windows.yaml'
+      - '.github/scripts/Build-Windows.ps1'
+      - '.github/scripts/Package-Windows.ps1'
+      - '.github/scripts/utils.pwsh/**'
+      - '.github/actions/build-obs/**'
+      - '.github/actions/package-obs/**'
+      - 'CMakeLists.txt'
+      - 'CMakePresets.json'
+      - 'buildspec.json'
+      - 'cmake/**'
+      - 'libobs/**'
+      - 'libobs-d3d11/**'
+      - 'libobs-winrt/**'
+      - 'plugins/**'
+      - 'frontend/**'
+  push:
+    branches:
+      - master
+      - 'release/**'
+    paths:
+      - '.github/workflows/build-windows.yaml'
+
+permissions:
+  contents: read
+
+jobs:
+  check-changes:
+    name: Check for relevant changes
+    runs-on: ubuntu-24.04
+    outputs:
+      windows_changes: ${{ steps.changes.outputs.windows_changes }}
+      should_build: ${{ steps.changes.outputs.should_build }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for Windows-related changes
+        id: changes
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "should_build=true" >> $GITHUB_OUTPUT
+            echo "windows_changes=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            echo "should_build=true" >> $GITHUB_OUTPUT
+            echo "windows_changes=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # For pull requests, check if there are relevant changes
+          changed_files=$(git diff --name-only HEAD~1 HEAD)
+          windows_patterns=(
+            "\.github/workflows/build-windows\.yaml"
+            "\.github/scripts/Build-Windows\.ps1"
+            "\.github/scripts/Package-Windows\.ps1"
+            "\.github/scripts/utils\.pwsh/"
+            "\.github/actions/build-obs/"
+            "\.github/actions/package-obs/"
+            "CMakeLists\.txt"
+            "CMakePresets\.json"
+            "buildspec\.json"
+            "cmake/"
+            "libobs/"
+            "libobs-d3d11/"
+            "libobs-winrt/"
+            "plugins/"
+            "frontend/"
+          )
+          
+          has_windows_changes=false
+          for pattern in "${windows_patterns[@]}"; do
+            if echo "$changed_files" | grep -E "$pattern" > /dev/null; then
+              has_windows_changes=true
+              break
+            fi
+          done
+          
+          echo "windows_changes=$has_windows_changes" >> $GITHUB_OUTPUT
+          echo "should_build=$has_windows_changes" >> $GITHUB_OUTPUT
+
+  build-windows:
+    name: Build Windows (${{ matrix.architecture }})
+    needs: check-changes
+    if: needs.check-changes.outputs.should_build == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        architecture: ${{ github.event_name == 'workflow_dispatch' && (github.event.inputs.architecture == 'both' && fromJSON('["x64", "arm64"]') || fromJSON(format('["{0}"]', github.event.inputs.architecture))) || fromJSON('["x64", "arm64"]') }}
+    runs-on: windows-2022
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Set Build Configuration
+        id: config
+        run: |
+          $config = if ('${{ github.event_name }}' -eq 'workflow_dispatch') {
+            '${{ github.event.inputs.build_config }}'
+          } else {
+            'RelWithDebInfo'
+          }
+          
+          $package = if ('${{ github.event_name }}' -eq 'workflow_dispatch') {
+            '${{ github.event.inputs.create_package }}'
+          } else {
+            'true'
+          }
+          
+          $commitHash = '${{ github.sha }}'.Substring(0, 9)
+          
+          "config=$config" >> $env:GITHUB_OUTPUT
+          "package=$package" >> $env:GITHUB_OUTPUT
+          "commitHash=$commitHash" >> $env:GITHUB_OUTPUT
+
+      - name: Build OBS Studio 🧱
+        uses: ./.github/actions/build-obs
+        env:
+          TWITCH_CLIENTID: ${{ secrets.TWITCH_CLIENT_ID }}
+          TWITCH_HASH: ${{ secrets.TWITCH_HASH }}
+          RESTREAM_CLIENTID: ${{ secrets.RESTREAM_CLIENTID }}
+          RESTREAM_HASH: ${{ secrets.RESTREAM_HASH }}
+          YOUTUBE_CLIENTID: ${{ secrets.YOUTUBE_CLIENTID }}
+          YOUTUBE_CLIENTID_HASH: ${{ secrets.YOUTUBE_CLIENTID_HASH }}
+          YOUTUBE_SECRET: ${{ secrets.YOUTUBE_SECRET }}
+          YOUTUBE_SECRET_HASH: ${{ secrets.YOUTUBE_SECRET_HASH }}
+          GPU_PRIORITY_VAL: ${{ secrets.GPU_PRIORITY_VAL }}
+        with:
+          target: ${{ matrix.architecture }}
+          config: ${{ steps.config.outputs.config }}
+
+      - name: Package OBS Studio 📀
+        if: steps.config.outputs.package == 'true'
+        uses: ./.github/actions/package-obs
+        with:
+          target: ${{ matrix.architecture }}
+          config: ${{ steps.config.outputs.config }}
+          package: true
+
+      - name: Upload Build Artifacts 📡
+        uses: actions/upload-artifact@v4
+        with:
+          name: obs-studio-windows-${{ matrix.architecture }}-${{ steps.config.outputs.commitHash }}
+          path: ${{ github.workspace }}/build_${{ matrix.architecture }}/obs-studio-*-windows-${{ matrix.architecture }}.zip
+          retention-days: 30
+
+      - name: Upload Debug Symbols 🐛
+        if: steps.config.outputs.package == 'true' && steps.config.outputs.config == 'Release'
+        uses: actions/upload-artifact@v4
+        with:
+          name: obs-studio-windows-${{ matrix.architecture }}-${{ steps.config.outputs.commitHash }}-pdbs
+          path: ${{ github.workspace }}/build_${{ matrix.architecture }}/obs-studio-*-windows-${{ matrix.architecture }}-pdbs.zip
+          retention-days: 30
+
+  build-summary:
+    name: Build Summary
+    needs: [check-changes, build-windows]
+    if: always()
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Generate Build Summary
+        run: |
+          echo "# Windows Build Summary 🪟" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [[ "${{ needs.check-changes.outputs.should_build }}" == "true" ]]; then
+            echo "✅ Windows build was triggered" >> $GITHUB_STEP_SUMMARY
+            
+            if [[ "${{ needs.build-windows.result }}" == "success" ]]; then
+              echo "✅ Windows build completed successfully" >> $GITHUB_STEP_SUMMARY
+            elif [[ "${{ needs.build-windows.result }}" == "failure" ]]; then
+              echo "❌ Windows build failed" >> $GITHUB_STEP_SUMMARY
+            elif [[ "${{ needs.build-windows.result }}" == "cancelled" ]]; then
+              echo "⚠️ Windows build was cancelled" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "⏸️ Windows build was skipped" >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "⏸️ No relevant changes detected, Windows build was skipped" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Build Details" >> $GITHUB_STEP_SUMMARY
+          echo "- **Trigger**: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "- **Build Config**: ${{ github.event.inputs.build_config || 'RelWithDebInfo' }}" >> $GITHUB_STEP_SUMMARY
+            echo "- **Architecture**: ${{ github.event.inputs.architecture || 'both' }}" >> $GITHUB_STEP_SUMMARY
+            echo "- **Create Package**: ${{ github.event.inputs.create_package || 'true' }}" >> $GITHUB_STEP_SUMMARY
+          fi
