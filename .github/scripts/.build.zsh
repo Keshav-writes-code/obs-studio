@@ -57,6 +57,7 @@ build() {
     macos-x86_64
     macos-arm64
     ubuntu-x86_64
+    debian-x86_64
   )
 
   local config='RelWithDebInfo'
@@ -206,13 +207,20 @@ build() {
       }
       popd
       ;;
-    ubuntu-*)
+    ubuntu-*|debian-*)
       local cmake_bin='/usr/bin/cmake'
-      cmake_args+=(
-        --preset ubuntu-ci
-        -DENABLE_BROWSER:BOOL=ON
-        -DCEF_ROOT_DIR:PATH="${project_root}/.deps/cef_binary_${CEF_VERSION}_${target//ubuntu-/linux_}"
-      )
+      if [[ ${host_os} == ubuntu ]]; then
+        cmake_args+=(
+          --preset ${host_os}-ci
+          -DENABLE_BROWSER:BOOL=ON
+          -DCEF_ROOT_DIR:PATH="${project_root}/.deps/cef_binary_${CEF_VERSION}_${target//${host_os}-/linux_}"
+        )
+      else
+        cmake_args+=(
+          --preset ${host_os}-ci
+          -DENABLE_BROWSER:BOOL=OFF
+        )
+      fi
 
       cmake_build_args+=(build_${target%%-*} --config ${config} --parallel)
       cmake_install_args+=(build_${target%%-*} --prefix ${project_root}/build_${target%%-*}/install/${config})

@@ -266,6 +266,8 @@ jobs:
           ubuntu_2404_x86_64_artifact_name="obs-studio-ubuntu-24.04-x86_64-${commit_hash}"
           ubuntu_2404_x86_64_debug_name="obs-studio-ubuntu-24.04-x86_64-${commit_hash}-dbgsym"
           ubuntu_2404_sources_name="obs-studio-ubuntu-24.04-sources-${commit_hash}"
+          debian_x86_64_artifact_name="obs-studio-debian-x86_64-${commit_hash}"
+          debian_x86_64_debug_name="obs-studio-debian-x86_64-${commit_hash}-dbgsym"
           windows_x64_artifact_name="obs-studio-windows-x64-${{ steps.check.outputs.version }}-signed"
           windows_x64_installer_name="obs-studio-windows-x64-${{ steps.check.outputs.version }}-installer"
           windows_x64_debug_name="obs-studio-windows-x64-${{ steps.check.outputs.version }}-pdbs"
@@ -285,6 +287,10 @@ jobs:
             "${root_dir}"/OBS-Studio-${{ steps.check.outputs.version }}-Ubuntu-24.04-x86_64.deb
           mv -v "${ubuntu_2404_x86_64_debug_name}/"obs-studio-*-x86_64-ubuntu-gnu-dbgsym.ddeb \
             "${root_dir}"/OBS-Studio-${{ steps.check.outputs.version }}-Ubuntu-24.04-x86_64-dbsym.ddeb
+          mv -v "${debian_x86_64_artifact_name}/"obs-studio-*-x86_64-debian-gnu.deb \
+            "${root_dir}"/OBS-Studio-${{ steps.check.outputs.version }}-Debian-x86_64.deb
+          mv -v "${debian_x86_64_debug_name}/"obs-studio-*-x86_64-debian-gnu-dbgsym.ddeb \
+            "${root_dir}"/OBS-Studio-${{ steps.check.outputs.version }}-Debian-x86_64-dbsym.ddeb
           mv -v "${ubuntu_2404_sources_name}/"obs-studio-*-sources.tar.gz \
             "${root_dir}"/OBS-Studio-${{ steps.check.outputs.version }}-Sources.tar.gz
           mv -v "${windows_x64_artifact_name}/"OBS-Studio-*.zip \
@@ -326,6 +332,8 @@ jobs:
             ${{ github.workspace }}/OBS-Studio-${{ steps.check.outputs.version }}-macOS-*-dSYMs.tar.xz
             ${{ github.workspace }}/OBS-Studio-${{ steps.check.outputs.version }}-Ubuntu-*.deb
             ${{ github.workspace }}/OBS-Studio-${{ steps.check.outputs.version }}-Ubuntu-*.ddeb
+            ${{ github.workspace }}/OBS-Studio-${{ steps.check.outputs.version }}-Debian-*.deb
+            ${{ github.workspace }}/OBS-Studio-${{ steps.check.outputs.version }}-Debian-*.ddeb
             ${{ github.workspace }}/OBS-Studio-${{ steps.check.outputs.version }}-Sources.tar.gz
             ${{ github.workspace }}/OBS-Studio-${{ steps.check.outputs.version }}-Windows-x64.zip
             ${{ github.workspace }}/OBS-Studio-${{ steps.check.outputs.version }}-Windows-x64-Installer.exe

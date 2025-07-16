@@ -63,7 +63,7 @@ runs:
         .github/scripts/package-macos ${package_args}
 
     - name: Install Dependencies 🛍️
-      if: runner.os == 'Linux'
+      if: runner.os == 'Linux' && !contains(github.job, 'debian')
       shell: bash
       run: |
         : Install Dependencies 🛍️
@@ -73,22 +73,31 @@ runs:
         brew install --quiet zsh
         echo ::endgroup::
 
-    - name: Run Ubuntu packaging
+    - name: Run Linux packaging
       if: runner.os == 'Linux'
       shell: zsh --no-rcs --errexit --pipefail {0}
       working-directory: ${{ inputs.workingDirectory }}
       run: |
-        : Run Ubuntu Packaging
+        : Run Linux Packaging
+
+        # Determine target based on job name or environment  
+        if [[ "${GITHUB_JOB}" == *"debian"* ]]; then
+          local target_prefix="debian"
+          local package_script="package-debian"
+        else
+          local target_prefix="ubuntu"
+          local package_script="package-ubuntu"
+        fi
 
         local -a package_args=(
-          --target ubuntu-${{ inputs.target }}
+          --target ${target_prefix}-${{ inputs.target }}
           --config ${{ inputs.config }}
         )
         if (( ${+RUNNER_DEBUG} )) build_args+=(--debug)
 
         if [[ '${{ inputs.package }}' == true ]] package_args+=(--package)
 
-        ${{ inputs.workingDirectory }}/.github/scripts/package-ubuntu ${package_args}
+        ${{ inputs.workingDirectory }}/.github/scripts/${package_script} ${package_args}
 
     - name: Run Windows packaging
       if: runner.os == 'Windows'

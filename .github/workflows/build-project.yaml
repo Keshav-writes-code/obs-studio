@@ -239,6 +239,93 @@ jobs:
           path: ${{ github.workspace }}/.ccache
           key: ${{ runner.os }}-${{ matrix.os }}-ccache-x86_64-${{ needs.check-event.outputs.config }}
 
+  debian-build:
+    name: Debian 🐧
+    runs-on: ubuntu-24.04
+    needs: check-event
+    container:
+      image: debian:bookworm
+      options: --user root
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Install Git and Basic Tools 🔧
+        run: |
+          : Install Git and Basic Tools 🔧
+          apt-get update
+          apt-get install -y git ca-certificates curl sudo
+
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - uses: actions/cache/restore@v4
+        id: ccache-cache
+        with:
+          path: ${{ github.workspace }}/.ccache
+          key: ${{ runner.os }}-debian-ccache-x86_64-${{ needs.check-event.outputs.config }}
+          restore-keys: |
+            ${{ runner.os }}-debian-ccache-x86_64-
+
+      - name: Install Dependencies 🛍️
+        shell: bash
+        run: |
+          : Install Dependencies 🛍️
+          echo ::group::Install Dependencies
+          apt-get update
+          apt-get install -y build-essential cmake ninja-build pkg-config zsh curl \
+            libavcodec-dev libavdevice-dev libavfilter-dev libavformat-dev libavutil-dev \
+            libswresample-dev libswscale-dev libx264-dev libx11-dev libgl1-mesa-dev \
+            libasound2-dev libpulse-dev libjack-jackd2-dev libspeexdsp-dev \
+            libjansson-dev libluajit-5.1-dev python3-dev libmbedtls-dev libssl-dev \
+            libcurl4-openssl-dev libqt6-dev qt6-base-dev qt6-svg-dev \
+            libfdk-aac-dev libfontconfig-dev libfreetype-dev libudev-dev \
+            libv4l-dev libvlc-dev
+          echo ::endgroup:
+
+      - name: Build OBS Studio 🧱
+        uses: ./.github/actions/build-obs
+        env:
+          TWITCH_CLIENTID: ${{ secrets.TWITCH_CLIENT_ID }}
+          TWITCH_HASH: ${{ secrets.TWITCH_HASH }}
+          RESTREAM_CLIENTID: ${{ secrets.RESTREAM_CLIENTID }}
+          RESTREAM_HASH: ${{ secrets.RESTREAM_HASH }}
+          YOUTUBE_CLIENTID: ${{ secrets.YOUTUBE_CLIENTID }}
+          YOUTUBE_CLIENTID_HASH: ${{ secrets.YOUTUBE_CLIENTID_HASH }}
+          YOUTUBE_SECRET: ${{ secrets.YOUTUBE_SECRET }}
+          YOUTUBE_SECRET_HASH: ${{ secrets.YOUTUBE_SECRET_HASH }}
+        with:
+          target: x86_64
+          config: ${{ needs.check-event.outputs.config }}
+
+      - name: Package OBS Studio 📀
+        uses: ./.github/actions/package-obs
+        with:
+          target: x86_64
+          config: ${{ needs.check-event.outputs.config }}
+          package: ${{ fromJSON(needs.check-event.outputs.package) }}
+
+      - name: Upload Artifacts 📡
+        uses: actions/upload-artifact@v4
+        with:
+          name: obs-studio-debian-x86_64-${{ needs.check-event.outputs.commitHash }}
+          path: ${{ github.workspace }}/build_debian/obs-studio-*-x86_64-debian-gnu.*
+
+      - name: Upload Debug Symbol Artifacts 🪲
+        uses: actions/upload-artifact@v4
+        if: ${{ fromJSON(needs.check-event.outputs.package) }}
+        with:
+          name: obs-studio-debian-x86_64-${{ needs.check-event.outputs.commitHash }}-dbgsym
+          path: ${{ github.workspace }}/build_debian/obs-studio-*-x86_64-debian-gnu-dbgsym.ddeb
+
+      - uses: actions/cache/save@v4
+        if: github.event_name != 'pull_request' && steps.ccache-cache.outputs.cache-hit != 'true'
+        with:
+          path: ${{ github.workspace }}/.ccache
+          key: ${{ runner.os }}-debian-ccache-x86_64-${{ needs.check-event.outputs.config }}
+
   flatpak-build:
     name: Flatpak 📦
     runs-on: ubuntu-24.04
