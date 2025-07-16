@@ -109,8 +109,6 @@ build() {
 
   if [[ ${host_os} == ubuntu ]] {
     autoload -Uz setup_ubuntu && setup_ubuntu
-  } elif [[ ${host_os} == debian ]] {
-    autoload -Uz setup_ubuntu && setup_ubuntu
   }
 
   local product_name
@@ -211,11 +209,18 @@ build() {
       ;;
     ubuntu-*|debian-*)
       local cmake_bin='/usr/bin/cmake'
-      cmake_args+=(
-        --preset ${host_os}-ci
-        -DENABLE_BROWSER:BOOL=ON
-        -DCEF_ROOT_DIR:PATH="${project_root}/.deps/cef_binary_${CEF_VERSION}_${target//${host_os}-/linux_}"
-      )
+      if [[ ${host_os} == ubuntu ]]; then
+        cmake_args+=(
+          --preset ${host_os}-ci
+          -DENABLE_BROWSER:BOOL=ON
+          -DCEF_ROOT_DIR:PATH="${project_root}/.deps/cef_binary_${CEF_VERSION}_${target//${host_os}-/linux_}"
+        )
+      else
+        cmake_args+=(
+          --preset ${host_os}-ci
+          -DENABLE_BROWSER:BOOL=OFF
+        )
+      fi
 
       cmake_build_args+=(build_${target%%-*} --config ${config} --parallel)
       cmake_install_args+=(build_${target%%-*} --prefix ${project_root}/build_${target%%-*}/install/${config})

@@ -1,26 +1,26 @@
 autoload -Uz log_debug log_group
 
-log_group 'Check Ubuntu build requirements'
-log_debug 'Checking Ubuntu distribution name and version...'
+log_group 'Check Debian build requirements'
+log_debug 'Checking Debian distribution name and version...'
 
 if [[ -f /etc/os-release ]] {
   local dist_name
   local dist_version
   read -r dist_name dist_version <<< "$(source /etc/os-release; print "${NAME} ${VERSION_ID}")"
 
-  if [[ ${dist_name} != Ubuntu ]] {
-    log_error "Not running on an Ubuntu distribution. Aborting"
+  if [[ ${dist_name} != Debian* ]] {
+    log_error "Not running on a Debian distribution. Aborting"
     log_group
     return 2
   }
 
-  autoload -Uz is-at-least && if ! is-at-least 24.04 ${dist_version}; then
-    log_error "Not running on a recent-enough Ubuntu distribution. Aborting"
+  autoload -Uz is-at-least && if ! is-at-least 12 ${dist_version}; then
+    log_error "Not running on a recent-enough Debian distribution (need >= 12/bookworm). Aborting"
     log_group
     return 2
   fi
 } else {
-  log_error "Unable to determine local Linux distribution, but Ubuntu is required. Aborting"
+  log_error "Unable to determine local Linux distribution, but Debian is required. Aborting"
   log_group
   return 2
 }

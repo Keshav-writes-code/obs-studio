@@ -245,6 +245,7 @@ jobs:
     needs: check-event
     container:
       image: debian:bookworm
+      options: --user root
     defaults:
       run:
         shell: bash
@@ -253,7 +254,7 @@ jobs:
         run: |
           : Install Git and Basic Tools 🔧
           apt-get update
-          apt-get install -y git ca-certificates curl
+          apt-get install -y git ca-certificates curl sudo
 
       - uses: actions/checkout@v4
         with:
@@ -274,12 +275,15 @@ jobs:
           : Install Dependencies 🛍️
           echo ::group::Install Dependencies
           apt-get update
-          apt-get install -y build-essential cmake ninja-build pkg-config zsh
-          curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash
-          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-          echo "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin" >> $GITHUB_PATH
-          brew install --quiet zsh
-          echo ::endgroup::
+          apt-get install -y build-essential cmake ninja-build pkg-config zsh curl \
+            libavcodec-dev libavdevice-dev libavfilter-dev libavformat-dev libavutil-dev \
+            libswresample-dev libswscale-dev libx264-dev libx11-dev libgl1-mesa-dev \
+            libasound2-dev libpulse-dev libjack-jackd2-dev libspeexdsp-dev \
+            libjansson-dev libluajit-5.1-dev python3-dev libmbedtls-dev libssl-dev \
+            libcurl4-openssl-dev libqt6-dev qt6-base-dev qt6-svg-dev \
+            libfdk-aac-dev libfontconfig-dev libfreetype-dev libudev-dev \
+            libv4l-dev libvlc-dev
+          echo ::endgroup:
 
       - name: Build OBS Studio 🧱
         uses: ./.github/actions/build-obs
