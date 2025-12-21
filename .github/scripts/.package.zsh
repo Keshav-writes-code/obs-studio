@@ -127,7 +127,7 @@ package() {
   }
 
   if [[ ${host_os} == macos ]] {
-    if [[ ! -d build_macos/OBS.app ]] {
+    if [[ ! -d build_macos/"Legit App.app" ]] {
       log_error 'No application bundle found. Run the build script to create a valid application bundle.'
       return 0
     }
@@ -150,8 +150,8 @@ package() {
       cp ${project_root}/cmake/macos/resources/AppIcon.icns legit-app/.VolumeIcon.icns
       ln -s /Applications legit-app/Applications
 
-      mkdir -p legit-app/OBS.app
-      ditto OBS.app legit-app/OBS.app
+      mkdir -p legit-app/"Legit App.app"
+      ditto "Legit App.app" legit-app/"Legit App.app"
 
       local -i _status=0
 
@@ -191,7 +191,7 @@ package() {
     } else {
       log_group "Archiving legit-app..."
       pushd build_macos
-      XZ_OPT=-T0 tar -cvJf ${output_name}.tar.xz OBS.app
+      XZ_OPT=-T0 tar -cvJf ${output_name}.tar.xz "Legit App.app"
       popd
     }
 

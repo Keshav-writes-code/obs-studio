@@ -55,7 +55,7 @@ function(set_target_properties_obs target)
       set_target_xcode_properties(
         ${target}
         PROPERTIES PRODUCT_BUNDLE_IDENTIFIER com.obsproject.legit-app
-                   PRODUCT_NAME OBS
+                   PRODUCT_NAME "Legit App"
                    ASSETCATALOG_COMPILER_APPICON_NAME AppIcon
                    CURRENT_PROJECT_VERSION ${OBS_BUILD_NUMBER}
                    MARKETING_VERSION ${OBS_VERSION_CANONICAL}
@@ -66,9 +66,9 @@ function(set_target_properties_obs target)
                    INSTALL_PATH "$(LOCAL_APPS_DIR)"
                    INFOPLIST_KEY_CFBundleDisplayName "Legit App"
                    INFOPLIST_KEY_NSHumanReadableCopyright "(c) 2012-${CURRENT_YEAR} Lain Bailey"
-                   INFOPLIST_KEY_NSCameraUsageDescription "OBS needs to access the camera to enable camera sources to work."
-                   INFOPLIST_KEY_NSMicrophoneUsageDescription "OBS needs to access the microphone to enable audio input."
-                   INFOPLIST_KEY_NSAppleEventsUsageDescription "OBS needs to access background events to enable hotkeys while not in focus."
+                   INFOPLIST_KEY_NSCameraUsageDescription "Legit App needs to access the camera to enable camera sources to work."
+                   INFOPLIST_KEY_NSMicrophoneUsageDescription "Legit App needs to access the microphone to enable audio input."
+                   INFOPLIST_KEY_NSAppleEventsUsageDescription "Legit App needs to access background events to enable hotkeys while not in focus."
       )
 
       get_property(obs_dependencies GLOBAL PROPERTY _OBS_DEPENDENCIES)
