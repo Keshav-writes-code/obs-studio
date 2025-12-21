@@ -1,8 +1,8 @@
-name: Set Up and Build legit-app
-description: Builds legit-app for specified architecture and build config
+name: Set Up and Build obs-studio
+description: Builds obs-studio for specified architecture and build config
 inputs:
   target:
-    description: Build target for legit-app
+    description: Build target for obs-studio
     required: true
   config:
     description: Build configuration

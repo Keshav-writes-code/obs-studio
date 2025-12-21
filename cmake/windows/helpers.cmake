@@ -4,7 +4,7 @@ include_guard(GLOBAL)
 
 include(helpers_common)
 
-# set_target_properties_obs: Set target properties for use in legit-app
+# set_target_properties_obs: Set target properties for use in obs-studio
 function(set_target_properties_obs target)
   set(options "")
   set(oneValueArgs "")
@@ -35,13 +35,13 @@ function(set_target_properties_obs target)
 
     _target_install_obs(${target} DESTINATION ${OBS_EXECUTABLE_DESTINATION})
 
-    if(target STREQUAL legit-app)
+    if(target STREQUAL obs-studio)
       get_property(obs_executables GLOBAL PROPERTY _OBS_EXECUTABLES)
       get_property(obs_modules GLOBAL PROPERTY OBS_MODULES_ENABLED)
       add_dependencies(${target} ${obs_executables} ${obs_modules})
       _bundle_dependencies(${target})
       target_add_resource(${target} "${CMAKE_CURRENT_SOURCE_DIR}/../AUTHORS"
-                          "${OBS_DATA_DESTINATION}/legit-app/authors"
+                          "${OBS_DATA_DESTINATION}/obs-studio/authors"
       )
     elseif(target STREQUAL obs-browser-helper)
       set_property(GLOBAL APPEND PROPERTY _OBS_EXECUTABLES ${target})
@@ -318,8 +318,8 @@ function(target_install_resources target)
     get_property(obs_module_list GLOBAL PROPERTY OBS_MODULES_ENABLED)
     if(target IN_LIST obs_module_list)
       set(target_destination "${OBS_DATA_DESTINATION}/obs-plugins/${target}")
-    elseif(target STREQUAL legit-app)
-      set(target_destination "${OBS_DATA_DESTINATION}/legit-app")
+    elseif(target STREQUAL obs-studio)
+      set(target_destination "${OBS_DATA_DESTINATION}/obs-studio")
     else()
       set(target_destination "${OBS_DATA_DESTINATION}/${target}")
     endif()
@@ -352,8 +352,8 @@ function(target_add_resource target resource)
     set(target_destination "${ARGN}")
   elseif(${target} IN_LIST obs_module_list)
     set(target_destination "${OBS_DATA_DESTINATION}/obs-plugins/${target}")
-  elseif(target STREQUAL legit-app)
-    set(target_destination "${OBS_DATA_DESTINATION}/legit-app")
+  elseif(target STREQUAL obs-studio)
+    set(target_destination "${OBS_DATA_DESTINATION}/obs-studio")
   else()
     set(target_destination "${OBS_DATA_DESTINATION}/${target}")
   endif()

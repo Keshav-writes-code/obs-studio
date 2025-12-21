@@ -7,12 +7,12 @@ BEGIN
   BEGIN
     BLOCK "040904B0"
     BEGIN
-      VALUE "CompanyName", "Legit App"
-      VALUE "FileDescription", "Legit App"
+      VALUE "CompanyName", "OBS"
+      VALUE "FileDescription", "OBS Studio"
       VALUE "FileVersion", "${OBS_VERSION_CANONICAL}"
-      VALUE "InternalName", "legit-app"
-      VALUE "OriginalFilename", "legit-app"
-      VALUE "ProductName", "Legit App"
+      VALUE "InternalName", "obs"
+      VALUE "OriginalFilename", "obs"
+      VALUE "ProductName", "OBS Studio"
       VALUE "ProductVersion", "${OBS_VERSION_CANONICAL}"
       VALUE "Comments", "Free and open source software for video recording and live streaming"
       VALUE "LegalCopyright", "${OBS_LEGAL_COPYRIGHT}"

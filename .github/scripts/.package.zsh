@@ -121,9 +121,9 @@ package() {
 
   local output_name
   if (( commit_distance > 0 )) {
-    output_name="legit-app-${commit_version}-${commit_hash}"
+    output_name="obs-studio-${commit_version}-${commit_hash}"
   } else {
-    output_name="legit-app-${commit_version}"
+    output_name="obs-studio-${commit_version}"
   }
 
   if [[ ${host_os} == macos ]] {
@@ -145,20 +145,20 @@ package() {
     if (( package )) {
       pushd build_macos
 
-      mkdir -p legit-app/.background
-      cp ${project_root}/cmake/macos/resources/background.tiff legit-app/.background/
-      cp ${project_root}/cmake/macos/resources/AppIcon.icns legit-app/.VolumeIcon.icns
-      ln -s /Applications legit-app/Applications
+      mkdir -p obs-studio/.background
+      cp ${project_root}/cmake/macos/resources/background.tiff obs-studio/.background/
+      cp ${project_root}/cmake/macos/resources/AppIcon.icns obs-studio/.VolumeIcon.icns
+      ln -s /Applications obs-studio/Applications
 
-      mkdir -p legit-app/OBS.app
-      ditto OBS.app legit-app/OBS.app
+      mkdir -p obs-studio/OBS.app
+      ditto OBS.app obs-studio/OBS.app
 
       local -i _status=0
 
       autoload -Uz create_diskimage
-      create_diskimage legit-app ${volume_name} ${output_name} || _status=1
+      create_diskimage obs-studio ${volume_name} ${output_name} || _status=1
 
-      rm -r legit-app
+      rm -r obs-studio
       if (( _status )) {
         log_error "Disk image creation failed."
         return 2
@@ -189,7 +189,7 @@ package() {
       }
       popd
     } else {
-      log_group "Archiving legit-app..."
+      log_group "Archiving obs-studio..."
       pushd build_macos
       XZ_OPT=-T0 tar -cvJf ${output_name}.tar.xz OBS.app
       popd
@@ -214,20 +214,20 @@ package() {
     if (( debug )) cmake_args+=(--verbose)
 
     if (( package )) {
-      log_group "Packaging legit-app..."
+      log_group "Packaging obs-studio..."
       pushd ${project_root}
       ${cmake_bin} --build build_${target%%-*} --config ${config} --target package ${cmake_args}
       output_name="${output_name}-${target##*-}-ubuntu-gnu"
 
       pushd ${project_root}/build_${target%%-*}
-      local -a files=(legit-app-*-Linux*.(ddeb|deb|ddeb.sha256|deb.sha256))
+      local -a files=(obs-studio-*-Linux*.(ddeb|deb|ddeb.sha256|deb.sha256))
       for file (${files}) {
-        mv ${file} ${file//legit-app-*-Linux/${output_name}}
+        mv ${file} ${file//obs-studio-*-Linux/${output_name}}
       }
       popd
       popd
     } else {
-      log_group "Archiving legit-app..."
+      log_group "Archiving obs-studio..."
       output_name="${output_name}-${target##*-}-ubuntu-gnu"
 
       pushd ${project_root}/build_${target%%-*}/install/${config}
@@ -240,9 +240,9 @@ package() {
     output_name="${output_name}-sources"
 
     pushd ${project_root}/build_${target%%-*}
-    local -a files=(legit-app-*-sources.tar.*)
+    local -a files=(obs-studio-*-sources.tar.*)
     for file (${files}) {
-      mv ${file} ${file//legit-app-*-sources/${output_name}}
+      mv ${file} ${file//obs-studio-*-sources/${output_name}}
     }
     popd
     popd

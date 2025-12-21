@@ -18,11 +18,11 @@ if ( $env:CI -eq $null ) {
 }
 
 if ( ! ( [System.Environment]::Is64BitOperatingSystem ) ) {
-    throw "legit-app requires a 64-bit system to build and run."
+    throw "obs-studio requires a 64-bit system to build and run."
 }
 
 if ( $PSVersionTable.PSVersion -lt '7.2.0' ) {
-    Write-Warning 'The legit-app PowerShell build script requires PowerShell Core 7. Install or upgrade your PowerShell version: https://aka.ms/pscore6'
+    Write-Warning 'The obs-studio PowerShell build script requires PowerShell Core 7. Install or upgrade your PowerShell version: https://aka.ms/pscore6'
     exit 2
 }
 
@@ -76,13 +76,13 @@ function Build {
         '--config', $Configuration
     )
 
-    Log-Group "Configuring legit-app..."
+    Log-Group "Configuring obs-studio..."
     Invoke-External cmake @CmakeArgs
 
-    Log-Group "Building legit-app..."
+    Log-Group "Building obs-studio..."
     Invoke-External cmake @CmakeBuildArgs
 
-    Log-Group "Installing legit-app..."
+    Log-Group "Installing obs-studio..."
     Invoke-External cmake @CmakeInstallArgs
 
     Pop-Location -Stack BuildTemp

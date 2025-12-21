@@ -74,7 +74,7 @@ std::filesystem::path CrashHandler::findLastCrashLog() const
 
 std::filesystem::path CrashHandler::getCrashLogDirectory() const
 {
-	BPtr crashLogDirectory = GetAppConfigPathPtr("legit-app/crashes");
+	BPtr crashLogDirectory = GetAppConfigPathPtr("obs-studio/crashes");
 
 	std::string crashLogDirectoryString = crashLogDirectory.Get();
 

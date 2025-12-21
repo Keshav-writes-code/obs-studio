@@ -150,8 +150,8 @@ build() {
 
       local -a build_args=(
         ONLY_ACTIVE_ARCH=NO
-        -project legit-app.xcodeproj
-        -target legit-app
+        -project obs-studio.xcodeproj
+        -target obs-studio
         -destination "generic/platform=macOS,name=Any Mac"
         -configuration ${config}
         -parallelizeTargets
@@ -161,10 +161,10 @@ build() {
 
       local -a archive_args=(
         ONLY_ACTIVE_ARCH=NO
-        -project legit-app.xcodeproj
-        -scheme legit-app
+        -project obs-studio.xcodeproj
+        -scheme obs-studio
         -destination "generic/platform=macOS,name=Any Mac"
-        -archivePath legit-app.xcarchive
+        -archivePath obs-studio.xcarchive
         -parallelizeTargets
         -hideShellScriptEnvironment
         archive
@@ -172,7 +172,7 @@ build() {
 
       local -a export_args=(
         -exportArchive
-        -archivePath legit-app.xcarchive
+        -archivePath obs-studio.xcarchive
         -exportOptionsPlist exportOptions.plist
         -exportPath ${project_root}/build_macos
       )
@@ -180,8 +180,8 @@ build() {
       local -a analyze_args=(
         CLANG_ANALYZER_OUTPUT=sarif
         CLANG_ANALYZER_OUTPUT_DIR=${project_root}/analytics
-        -project legit-app.xcodeproj
-        -target legit-app
+        -project obs-studio.xcodeproj
+        -target obs-studio
         -destination "generic/platform=macOS,name=Any Mac"
         -configuration ${config}
         -parallelizeTargets

@@ -18,7 +18,7 @@ GoLiveApi::PostData constructGoLivePost(QString streamKey, const std::optional<u
 
 	auto &client = post_data.client;
 
-	client.name = "legit-app";
+	client.name = "obs-studio";
 	client.version = obs_get_version_string();
 
 	const char *encoder_id = nullptr;

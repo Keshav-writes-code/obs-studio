@@ -93,7 +93,7 @@ using std::optional;
 using json = nlohmann::json;
 
 struct Client {
-	string name = "legit-app";
+	string name = "obs-studio";
 	string version;
 	std::unordered_set<std::string> supported_codecs;
 

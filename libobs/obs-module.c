@@ -149,7 +149,7 @@ int obs_open_module(obs_module_t **module, const char *path, const char *data_pa
 	/* HACK: Do not load obsolete obs-browser build on macOS; the
 	 * obs-browser plugin used to live in the Application Support
 	 * directory. */
-	if (astrstri(path, "Library/Application Support/legit-app") != NULL && astrstri(path, "obs-browser") != NULL) {
+	if (astrstri(path, "Library/Application Support/obs-studio") != NULL && astrstri(path, "obs-browser") != NULL) {
 		blog(LOG_WARNING, "Ignoring old obs-browser.so version");
 		return MODULE_HARDCODED_SKIP;
 	}

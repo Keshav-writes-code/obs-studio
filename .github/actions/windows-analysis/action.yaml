@@ -49,7 +49,7 @@ runs:
             "--disableLicenseExpirationCheck"
             "-p", "${{ inputs.target }}"
             "-c", "${{ inputs.config }}"
-            "-t", "${{ github.workspace }}\build_x64\legit-app.sln"
+            "-t", "${{ github.workspace }}\build_x64\obs-studio.sln"
             "-o", "${{ github.workspace }}\analysis.plog"
             "-C", "${env:GITHUB_ACTION_PATH}\obs.pvsconfig"
         )

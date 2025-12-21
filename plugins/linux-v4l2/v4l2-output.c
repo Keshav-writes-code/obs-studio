@@ -21,7 +21,7 @@ struct virtualcam_data {
 static const char *virtualcam_name(void *unused)
 {
 	UNUSED_PARAMETER(unused);
-	return "Legit-App Camera Output";
+	return "Virtual Camera Output";
 }
 
 static void virtualcam_destroy(void *data)
@@ -100,7 +100,7 @@ bool loopback_module_available()
 static int loopback_module_load()
 {
 	return run_command(
-		"pkexec modprobe v4l2loopback exclusive_caps=1 card_label='Legit-App Camera' && sleep 0.5");
+		"pkexec modprobe v4l2loopback exclusive_caps=1 card_label='OBS Virtual Camera' && sleep 0.5");
 }
 #else
 bool loopback_module_available()

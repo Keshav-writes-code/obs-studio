@@ -18,11 +18,11 @@ if ( $env:CI -eq $null ) {
 }
 
 if ( ! ( [System.Environment]::Is64BitOperatingSystem ) ) {
-    throw "legit-app requires a 64-bit system to build and run."
+    throw "obs-studio requires a 64-bit system to build and run."
 }
 
 if ( $PSVersionTable.PSVersion -lt '7.2.0' ) {
-    Write-Warning 'The legit-app packaging script requires PowerShell Core 7. Install or upgrade your PowerShell version: https://aka.ms/pscore6'
+    Write-Warning 'The obs-studio packaging script requires PowerShell Core 7. Install or upgrade your PowerShell version: https://aka.ms/pscore6'
     exit 2
 }
 
@@ -52,9 +52,9 @@ function Package {
     $CommitDistance = $Tokens[-2]
 
     if ( $CommitDistance -gt 0 ) {
-        $OutputName = "legit-app-${CommitVersion}-${CommitHash}"
+        $OutputName = "obs-studio-${CommitVersion}-${CommitHash}"
     } else {
-        $OutputName = "legit-app-${CommitVersion}"
+        $OutputName = "obs-studio-${CommitVersion}"
     }
 
     $CpackArgs = @(
@@ -65,13 +65,13 @@ function Package {
         $CpackArgs += ('--verbose')
     }
 
-    Log-Group "Packaging legit-app..."
+    Log-Group "Packaging obs-studio..."
 
     Push-Location -Stack PackageTemp "build_${Target}"
 
     cpack @CpackArgs
 
-    $Package = Get-ChildItem -filter "legit-app-*-windows-${Target}.zip" -File
+    $Package = Get-ChildItem -filter "obs-studio-*-windows-${Target}.zip" -File
     Move-Item -Path $Package -Destination "${OutputName}-windows-${Target}.zip"
 
     Pop-Location -Stack PackageTemp

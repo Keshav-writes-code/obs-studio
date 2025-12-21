@@ -1351,7 +1351,7 @@ static bool Update(wchar_t *cmdLine)
 		Status(L"Update failed: Failed to get temp path: %ld", GetLastError());
 		return false;
 	}
-	if (!GetTempFileNameW(tempDirName, L"legit-app", 0, tempPath)) {
+	if (!GetTempFileNameW(tempDirName, L"obs-studio", 0, tempPath)) {
 		Status(L"Update failed: Failed to create temp dir name: %ld", GetLastError());
 		return false;
 	}
