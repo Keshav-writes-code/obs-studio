@@ -44,7 +44,7 @@ jobs:
       - name: Download Artifact 📥
         uses: actions/download-artifact@v4
         with:
-          name: obs-studio-windows-${{ matrix.architecture }}-${{ steps.setup.outputs.commitHash }}
+          name: legit-app-windows-${{ matrix.architecture }}-${{ steps.setup.outputs.commitHash }}
           path: ${{ github.workspace }}/build
 
       - name: Run bouf 🥩
@@ -64,14 +64,14 @@ jobs:
       - name: Upload Signed Build
         uses: actions/upload-artifact@v4
         with:
-          name: obs-studio-windows-${{ matrix.architecture }}-${{ github.ref_name }}-signed
+          name: legit-app-windows-${{ matrix.architecture }}-${{ github.ref_name }}-signed
           compression-level: 0
           path: ${{ github.workspace }}/output/*-${{ matrix.architecture }}.zip
 
       - name: Upload PDBs
         uses: actions/upload-artifact@v4
         with:
-          name: obs-studio-windows-${{ matrix.architecture }}-${{ github.ref_name }}-pdbs
+          name: legit-app-windows-${{ matrix.architecture }}-${{ github.ref_name }}-pdbs
           compression-level: 0
           path: ${{ github.workspace }}/output/*-pdbs.zip
 
@@ -79,6 +79,6 @@ jobs:
         uses: actions/upload-artifact@v4
         if: matrix.architecture == 'x64'
         with:
-          name: obs-studio-windows-${{ matrix.architecture }}-${{ github.ref_name }}-installer
+          name: legit-app-windows-${{ matrix.architecture }}-${{ github.ref_name }}-installer
           compression-level: 0
           path: ${{ github.workspace }}/output/*.exe

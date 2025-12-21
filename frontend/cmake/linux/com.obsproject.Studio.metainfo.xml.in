@@ -4,9 +4,9 @@
   <launchable type="desktop-id">com.obsproject.Studio.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0-or-later</project_license>
-  <name>OBS Studio</name>
+  <name>Legit App</name>
   <developer id="com.obsproject">
-    <name>OBS Project</name>
+    <name>Legit App Project</name>
   </developer>
   <summary>Live stream and record videos</summary>
   <description>
@@ -28,9 +28,9 @@
       <li>Get a high level view of your production using the Multiview. Monitor 8 different scenes and easily cue or transition to any of them with merely a single or double click.</li>
     </ul>
   </description>
-  <url type="homepage">https://obsproject.com</url>
-  <url type="bugtracker">https://github.com/obsproject/obs-studio/issues</url>
-  <url type="donation">https://obsproject.com/contribute</url>
+  <url type="homepage">https://example.com/legit-app</url>
+  <url type="bugtracker">https://github.com/legit-app/legit-app/issues</url>
+  <url type="donation">https://example.com/legit-app/contribute</url>
   <url type="translate">https://crowdin.com/project/obs-studio</url>
 
   <recommends>
@@ -46,7 +46,7 @@
 
   <screenshots>
     <screenshot type="default">
-      <image>https://obsproject.com/assets/images/OBSDemoApp301Flathub.png</image>
+      <image>https://example.com/legit-app/assets/images/LegitAppDemo.png</image>
       <caption>The OBS Studio window showing a card game, the project website, a video, and a purple rectangle</caption>
     </screenshot>
   </screenshots>
@@ -59,10 +59,10 @@
 
   <releases>
     <release version="@OBS_VERSION@" date="@APPDATA_RELEASE_DATE@">
-      <url type="details">https://github.com/obsproject/obs-studio/releases/tag/@OBS_VERSION@</url>
+      <url type="details">https://github.com/legit-app/legit-app/releases/tag/@OBS_VERSION@</url>
     </release>
   </releases>
   <custom>
-    <value key="flathub::manifest">https://github.com/obsproject/obs-studio/blob/@GIT_HASH@/build-aux/</value>
+    <value key="flathub::manifest">https://github.com/legit-app/legit-app/blob/@GIT_HASH@/build-aux/</value>
   </custom>
 </component>

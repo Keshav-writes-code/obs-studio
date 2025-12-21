@@ -1,15 +1,15 @@
 [Desktop Entry]
 Version=1.0
-Name=OBS Studio
+Name=Legit App
 GenericName=Streaming/Recording Software
 Comment=Free and Open Source Streaming/Recording Software
-Exec=obs
+Exec=legit-app
 Icon=com.obsproject.Studio
 Terminal=false
 Type=Application
 Categories=AudioVideo;Recorder;
 StartupNotify=true
-StartupWMClass=obs
+StartupWMClass=legit-app
 
 GenericName[af_ZA]=Stroom-/Opnameprogrammatuur
 Comment[af_ZA]=Gratis en oopbron stroom-/opnameprogrammatuur

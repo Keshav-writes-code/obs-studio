@@ -19,7 +19,7 @@ class OBSCameraProviderSource: NSObject, CMIOExtensionProviderSource {
 
         provider = CMIOExtensionProvider(source: self, clientQueue: clientQueue)
         deviceSource = OBSCameraDeviceSource(
-            localizedName: "OBS Virtual Camera",
+            localizedName: "Legit-App Camera",
             deviceUUID: deviceUUID,
             sourceUUID: sourceUUID,
             sinkUUID: sinkUUID)

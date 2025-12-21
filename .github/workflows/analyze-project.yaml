@@ -116,7 +116,7 @@ jobs:
 
           local analytics_root='${{ github.workspace }}/analytics'
 
-          local -a analytics_files=(${analytics_root}/StaticAnalyzer/obs-studio/**/*.plist)
+          local -a analytics_files=(${analytics_root}/StaticAnalyzer/legit-app/**/*.plist)
 
           for file (${analytics_files}) {
             mv ${file} ${analytics_root}/${${file:t}//plist/sarif}

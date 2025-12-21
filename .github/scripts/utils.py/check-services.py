@@ -34,7 +34,7 @@ Created by workflow run: https://github.com/{repository}/actions/runs/{run_id}""
 # GQL is great isn't it
 GQL_QUERY = """{
   repositoryOwner(login: "obsproject") {
-    repository(name: "obs-studio") {
+    repository(name: "legit-app") {
       object(expression: "master") {
         ... on Commit {
           blame(path: "plugins/rtmp-services/data/services.json") {
