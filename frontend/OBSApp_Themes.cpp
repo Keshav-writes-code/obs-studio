@@ -984,7 +984,7 @@ bool OBSApp::InitTheme()
 	}
 
 	char userDir[512];
-	if (GetAppConfigPath(userDir, sizeof(userDir), "obs-studio/themes")) {
+	if (GetAppConfigPath(userDir, sizeof(userDir), "legit-app/themes")) {
 		auto configSearchDir = filesystem::u8path(userDir);
 		QDir::addSearchPath("theme", absolute(configSearchDir));
 	}

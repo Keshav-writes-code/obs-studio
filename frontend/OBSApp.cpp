@@ -390,36 +390,36 @@ static bool MakeUserDirs()
 {
 	char path[512];
 
-	if (GetAppConfigPath(path, sizeof(path), "obs-studio/basic") <= 0)
+	if (GetAppConfigPath(path, sizeof(path), "legit-app/basic") <= 0)
 		return false;
 	if (!do_mkdir(path))
 		return false;
 
-	if (GetAppConfigPath(path, sizeof(path), "obs-studio/logs") <= 0)
+	if (GetAppConfigPath(path, sizeof(path), "legit-app/logs") <= 0)
 		return false;
 	if (!do_mkdir(path))
 		return false;
 
-	if (GetAppConfigPath(path, sizeof(path), "obs-studio/profiler_data") <= 0)
+	if (GetAppConfigPath(path, sizeof(path), "legit-app/profiler_data") <= 0)
 		return false;
 	if (!do_mkdir(path))
 		return false;
 
 #ifdef _WIN32
-	if (GetAppConfigPath(path, sizeof(path), "obs-studio/crashes") <= 0)
+	if (GetAppConfigPath(path, sizeof(path), "legit-app/crashes") <= 0)
 		return false;
 	if (!do_mkdir(path))
 		return false;
 #endif
 
 #ifdef WHATSNEW_ENABLED
-	if (GetAppConfigPath(path, sizeof(path), "obs-studio/updates") <= 0)
+	if (GetAppConfigPath(path, sizeof(path), "legit-app/updates") <= 0)
 		return false;
 	if (!do_mkdir(path))
 		return false;
 #endif
 
-	if (GetAppConfigPath(path, sizeof(path), "obs-studio/plugin_config") <= 0)
+	if (GetAppConfigPath(path, sizeof(path), "legit-app/plugin_config") <= 0)
 		return false;
 	if (!do_mkdir(path))
 		return false;
@@ -509,7 +509,7 @@ bool OBSApp::InitGlobalConfig()
 {
 	char path[512];
 
-	int len = GetAppConfigPath(path, sizeof(path), "obs-studio/global.ini");
+	int len = GetAppConfigPath(path, sizeof(path), "legit-app/global.ini");
 	if (len <= 0) {
 		return false;
 	}
@@ -916,7 +916,7 @@ static void move_basic_to_profiles(void)
 {
 	char path[512];
 
-	if (GetAppConfigPath(path, 512, "obs-studio/basic") <= 0) {
+	if (GetAppConfigPath(path, 512, "legit-app/basic") <= 0) {
 		return;
 	}
 
@@ -980,7 +980,7 @@ static void move_basic_to_scene_collections(void)
 {
 	char path[512];
 
-	if (GetAppConfigPath(path, 512, "obs-studio/basic") <= 0) {
+	if (GetAppConfigPath(path, 512, "legit-app/basic") <= 0) {
 		return;
 	}
 
@@ -1106,7 +1106,7 @@ static bool StartupOBS(const char *locale, profiler_name_store_t *store)
 {
 	char path[512];
 
-	if (GetAppConfigPath(path, sizeof(path), "obs-studio/plugin_config") <= 0)
+	if (GetAppConfigPath(path, sizeof(path), "legit-app/plugin_config") <= 0)
 		return false;
 
 	return obs_startup(locale, path, store);
@@ -1362,14 +1362,14 @@ void OBSApp::uploadLastAppLog() const
 {
 	OBSBasic *basicWindow = static_cast<OBSBasic *>(GetMainWindow());
 
-	basicWindow->UploadLog("obs-studio/logs", GetLastLog(), OBS::LogFileType::LastAppLog);
+	basicWindow->UploadLog("legit-app/logs", GetLastLog(), OBS::LogFileType::LastAppLog);
 }
 
 void OBSApp::uploadCurrentAppLog() const
 {
 	OBSBasic *basicWindow = static_cast<OBSBasic *>(GetMainWindow());
 
-	basicWindow->UploadLog("obs-studio/logs", GetCurrentLog(), OBS::LogFileType::CurrentAppLog);
+	basicWindow->UploadLog("legit-app/logs", GetCurrentLog(), OBS::LogFileType::CurrentAppLog);
 }
 
 void OBSApp::uploadLastCrashLog()

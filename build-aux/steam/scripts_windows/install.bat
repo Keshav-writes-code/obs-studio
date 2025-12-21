@@ -19,8 +19,8 @@ goto checkAdmin
 
 :setupProgramData
 	:: Required for UWP applications
-	mkdir "%PROGRAMDATA%\obs-studio-hook"
-	icacls "%PROGRAMDATA%\obs-studio-hook" /grant "ALL APPLICATION PACKAGES":(OI)(CI)(GR,GE)
+	mkdir "%PROGRAMDATA%\legit-app-hook"
+	icacls "%PROGRAMDATA%\legit-app-hook" /grant "ALL APPLICATION PACKAGES":(OI)(CI)(GR,GE)
 
 :checkDLL
 	echo Checking for 32-bit Virtual Cam registration...

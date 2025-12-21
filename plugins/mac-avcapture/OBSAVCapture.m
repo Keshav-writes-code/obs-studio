@@ -29,7 +29,7 @@ static const UInt32 kMaxFrameRateRangesInDescription = 10;
         UInt32 allow = 1;
         CMIOObjectSetPropertyData(kCMIOObjectSystemObject, &propertyAddress, 0, NULL, sizeof(allow), &allow);
 
-        _errorDomain = @"com.obsproject.obs-studio.av-capture";
+        _errorDomain = @"com.obsproject.legit-app.av-capture";
 
         _presetList = @{
             AVCaptureSessionPresetLow: @"Low",
